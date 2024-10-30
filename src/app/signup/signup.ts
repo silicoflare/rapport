@@ -1,14 +1,13 @@
-import env from "@/env";
-import AES from "@/utils/crypto/AES";
-import db from "@/utils/db";
-import { generatePhrase } from "@/utils/tools";
-import { pbkdf2Sync, randomBytes } from "crypto";
-import { NextRequest, NextResponse } from "next/server";
+"use server"
 
-export async function POST(req: NextRequest) {
-  const { username, name, password } = await req.json() as Record<string, string>
+import env from "@/env"
+import AES from "@/utils/crypto/AES"
+import db from "@/utils/db"
+import { generatePhrase } from "@/utils/tools"
+import { pbkdf2Sync, randomBytes } from "crypto"
 
-  const PAK = password
+export default async function signup(name: string, username: string, password: string) {
+  const PAK = pbkdf2Sync(password, env.AUTH_SALT, 97965, 32, "sha256").toString("base64")
   const recoveryphrase = generatePhrase()
   const RAK = pbkdf2Sync(recoveryphrase, env.AUTH_SALT, 97965, 32, "sha256").toString("base64")
 
@@ -43,9 +42,5 @@ export async function POST(req: NextRequest) {
     }
   })
 
-  return NextResponse.json({
-    id,
-    username,
-    recoveryphrase
-  })
+  return { recoveryphrase }
 }

@@ -2,11 +2,23 @@
 
 import { turretroad } from "@/utils/fonts";
 import { twMerge } from "tailwind-merge";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import UserMenu from "./UserMenu";
 
-export default function Navbar({ hideLogin = true }) {
+export default function Navbar() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   return (
-    <div className="w-full p-5 px-10 flex items-center justify-between fixed top-0 left-0 text-foreground">
-      <h1 className={twMerge("text-4xl font-semibold", turretroad)}>Rapport</h1>
+    <div className="w-full p-2 px-10 flex items-center justify-between text-foreground">
+      <Link href="/">
+        <h1 className="text-4xl font-semibold font-header">Rapport</h1>
+      </Link>
+      <UserMenu />
     </div>
   );
 }

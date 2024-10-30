@@ -14,26 +14,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/utils/bridge";
-import { useAtom } from "jotai";
-import { recAtom } from "@/utils/atoms";
 import { cn } from "@/lib/utils";
-import signup from "./signup";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
   const router = useRouter();
-  const [, setPhrase] = useAtom(recAtom);
 
   const formSchema = z.object({
-    name: z.string().min(1),
-    username: z
-      .string()
-      .min(1)
-      .refine(() => {
-        return true;
-      }),
+    username: z.string().min(1),
     password: z.string().min(5),
-    confPassword: z.string().min(5),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,16 +30,20 @@ export default function SignUp() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (data.password !== data.confPassword) {
-      form.setError("confPassword", {
-        message: "Passwords don't match",
-      });
-      return;
-    }
+    const res = await signIn("credentials", {
+      username: data.username,
+      password: data.password,
+      redirect: false,
+    });
 
-    const res = await signup(data.name, data.username, data.confPassword);
-    setPhrase(res.recoveryphrase);
-    router.push("/recphrase");
+    console.log(res);
+
+    if (res && res.ok) {
+      router.push("/chats");
+    } else {
+      form.setError("username", { message: "Username or password is invalid" });
+      form.setError("password", { message: "Username or password is invalid" });
+    }
   }
 
   return (
@@ -58,20 +51,6 @@ export default function SignUp() {
       <h2 className="text-3xl font-semibold font-header">Sign Up</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={cn("w-1/4")}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg">Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <br />
           <FormField
             control={form.control}
             name="username"
@@ -92,20 +71,6 @@ export default function SignUp() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg">Password</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <br />
-          <FormField
-            control={form.control}
-            name="confPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg">Confirm Password</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>

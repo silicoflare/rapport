@@ -12,19 +12,13 @@ export default function Home() {
       <div className="w-1/3 flex flex-col items-center gap-3">
         <Link
           href="/signup"
-          className={cn(
-            "w-full border-primary rounded-md text-xl p-3 bg-primary text-primary-foreground flex items-center justify-center",
-            montserrat
-          )}
+          className="w-full border-primary rounded-md text-xl p-3 bg-primary text-primary-foreground flex items-center justify-center font-montserrat"
         >
           Sign Up
         </Link>
         <Link
           href="/login"
-          className={cn(
-            "w-full border-primary rounded-md text-xl p-3 bg-primary text-primary-foreground flex items-center justify-center",
-            montserrat
-          )}
+          className="w-full border-primary rounded-md text-xl p-3 bg-primary text-primary-foreground flex items-center justify-center font-montserrat"
         >
           Login
         </Link>
