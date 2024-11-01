@@ -3,7 +3,7 @@
 import db from "@/utils/db";
 import { auth } from "../api/auth/[...nextauth]/route";
 import { randomBytes } from "crypto";
-import { CHAT_STORE, USER_STORE } from "@/utils/keystore";
+import { userSecrets } from "@/utils/keys";
 
 /**
  * I couldn't give two shits if you think this is GPT generated code because
@@ -126,7 +126,7 @@ export async function getContacts() {
       id: c.id,
       name: c.name,
       username: c.username,
-      chat_id: c.ChatSecret.find((c) => c.userID === ID)?.chatID ?? "",
+      chat_id: "",
     });
   }
 
@@ -163,10 +163,14 @@ export async function addContact(id: string) {
   const chat_secret = randomBytes(32).toString("base64");
 
   // create a new chat
-  const createdChatID = (await db.chat.create({})).id;
+  const createdChatID = (
+    await db.chat.create({
+      data: {},
+    })
+  ).id;
 
   // get current user's ECDH object
-  const ecdh = USER_STORE.get(ID)!.ecdh;
+  const { ecdh } = await userSecrets();
 
   // encrypt chat secrets for both users
   await db.chatSecret.create({

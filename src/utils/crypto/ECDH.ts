@@ -50,7 +50,9 @@ export default class ECDH {
 
     const cipher = createCipheriv("aes-256-gcm", key, iv);
     const encrypted = cipher.update(Buffer.from(message)).toString("base64");
-    return `${iv.toString("base64")}.${ephECDH.getPublic().toString("base64")}.${encrypted}`;
+    return `${iv.toString("base64")}.${ephECDH
+      .getPublic()
+      .toString("base64")}.${encrypted}`;
   }
 
   decrypt(message: string) {
@@ -62,7 +64,7 @@ export default class ECDH {
     const cipher = createDecipheriv(
       "aes-256-gcm",
       key,
-      Buffer.from(iv, "base64"),
+      Buffer.from(iv, "base64")
     );
     const decrypted = cipher
       .update(Buffer.from(msg, "base64"))

@@ -1,3 +1,5 @@
+"use client";
+
 import { LockKeyholeIcon } from "lucide-react";
 
 export default function ChatsHome() {

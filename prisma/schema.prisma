@@ -36,7 +36,7 @@ model Chat {
 }
 
 model ChatSecret {
-  id         String @id @default(uuid())
+  id         String @id @default(cuid())
   chat       Chat   @relation(fields: [chatID], references: [id])
   chatID     String
   user       User   @relation(fields: [userID], references: [id])

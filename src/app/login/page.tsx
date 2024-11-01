@@ -27,6 +27,10 @@ export default function SignUp() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
@@ -35,8 +39,6 @@ export default function SignUp() {
       password: data.password,
       redirect: false,
     });
-
-    console.log(res);
 
     if (res && res.ok) {
       router.push("/chats");
@@ -48,7 +50,7 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col w-full h-full items-center justify-center gap-2">
-      <h2 className="text-3xl font-semibold font-header">Sign Up</h2>
+      <h2 className="text-3xl font-semibold font-header">Login</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={cn("w-1/4")}>
           <FormField

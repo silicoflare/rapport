@@ -1,9 +1,6 @@
 import env from "@/env";
-import { ChatState } from "@/types";
 import AES from "@/utils/crypto/AES";
-import ECDH from "@/utils/crypto/ECDH";
 import db from "@/utils/db";
-import { CHAT_STORE, USER_STORE } from "@/utils/keystore";
 import { pbkdf2Sync } from "crypto";
 import {
   GetServerSidePropsContext,
@@ -17,7 +14,6 @@ import NextAuth, {
   getServerSession,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { config } from "process";
 
 declare module "next-auth" {
   export interface Session extends DefaultSession {
@@ -32,6 +28,8 @@ declare module "next-auth" {
     id: string;
     name: string;
     username: string;
+    user_secret: string;
+    private_key: string;
   }
 }
 
@@ -40,6 +38,8 @@ declare module "next-auth/jwt" {
     id: string;
     name: string;
     username: string;
+    user_secret: string;
+    private_key: string;
   }
 }
 
@@ -50,62 +50,11 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const chats = await db.chatSecret.findMany({
-          where: {
-            userID: user.id,
-          },
-        });
-
-        const userSecret = await db.userSecret.findFirst({
-          where: {
-            user: {
-              id: user.id,
-            },
-          },
-        });
-
-        const secret = new AES(USER_STORE.get(user.id)!.user_secret as string);
-        const privatekey = secret.decrypt(userSecret!.privatestore);
-        const ecdh = new ECDH();
-        ecdh.setPrivate(Buffer.from(privatekey, "base64"));
-
-        const chatSecrets: Record<string, ChatState> = {};
-        for (let chat of chats) {
-          const otherUser = await db.user.findFirst({
-            where: {
-              AND: [
-                {
-                  id: user.id,
-                },
-                {
-                  ChatSecret: {
-                    some: {
-                      chatID: chat.chatID,
-                    },
-                  },
-                },
-              ],
-            },
-            include: {
-              userSecret: true,
-            },
-          });
-
-          const chatstate: ChatState = {
-            chat_secret: ecdh.decrypt(chat.userSecret),
-            shared_key: ecdh
-              .compute(Buffer.from(otherUser!.userSecret!.publickey, "base64"))
-              .toString("base64"),
-          };
-
-          chatSecrets[chat.chatID] = chatstate;
-        }
-
-        CHAT_STORE.set(user.id, chatSecrets);
-
         token.id = user.id;
         token.name = user.name;
         token.username = user.username;
+        token.user_secret = user.user_secret;
+        token.private_key = user.private_key;
       }
       return token;
     },
@@ -153,23 +102,17 @@ export const authOptions: AuthOptions = {
 
         if (passphrase === env.PASSPHRASE) {
           const userSecret = passAES.decrypt(user.userSecret!.keystore);
-          const ecdh = new ECDH();
-          ecdh.setPrivate(
-            Buffer.from(
-              new AES(userSecret).decrypt(user.userSecret!.privatestore),
-              "base64"
-            )
-          );
-          USER_STORE.set(user.id, {
-            user_secret: userSecret,
-            ecdh,
-          });
 
           const data = {
             id: user.id,
             username: user.username,
             name: user.name,
+            user_secret: userSecret,
+            private_key: new AES(userSecret).decrypt(
+              user.userSecret!.privatestore
+            ),
           };
+          console.log(data);
           return data;
         }
         return null;
