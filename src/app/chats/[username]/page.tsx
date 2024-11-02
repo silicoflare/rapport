@@ -1,16 +1,17 @@
 "use client";
 
 import useSWR from "swr";
-import { getChat } from "./actions";
+import { getUserData } from "./actions";
+import MessageArea from "./components/MessageArea";
 
 export default function UserChat({ params }: { params: { username: string } }) {
-  const { data: chatID } = useSWR(["chatID", params.username], () =>
-    getChat(params.username)
+  const { data: userData } = useSWR(["userdata", params.username], () =>
+    getUserData(params.username)
   );
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      {chatID}
+    <div className="w-full">
+      <MessageArea username={params.username} name={userData!.name} />
     </div>
   );
 }

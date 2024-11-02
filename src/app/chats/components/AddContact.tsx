@@ -60,10 +60,8 @@ export default function AddContact({
 
   return (
     <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
-      <DialogTrigger>
-        <Button className="w-9">
-          <PlusIcon size={20} />
-        </Button>
+      <DialogTrigger className="w-10 h-full bg-primary border-primary rounded-md text-white text-sm p-2 flex items-center justify-center">
+        <PlusIcon size={15} />
       </DialogTrigger>
       <DialogContent className="max-h-[66.666667%]">
         <DialogHeader>

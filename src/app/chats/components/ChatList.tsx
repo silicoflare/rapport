@@ -50,12 +50,11 @@ export default function ChatList() {
       </div>
       <div className="w-full h-full overflow-y-auto flex flex-col gap-2 items-center mt-5">
         {chats?.map((chat) => (
-          <Link href={`/chats/${chat.username}`} className="w-full">
-            <UserCard
-              name={chat.name}
-              username={chat.username}
-              key={chat.username}
-            />
+          <Link
+            href={`/chats/${chat.username}`}
+            className="w-full"
+            key={chat.username}>
+            <UserCard name={chat.name} username={chat.username} />
           </Link>
         ))}
       </div>

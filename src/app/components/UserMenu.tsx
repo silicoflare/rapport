@@ -9,12 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useMounted from "@/hooks/useMounted";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function UserMenu() {
   const { data: session } = useSession();
   const router = useRouter();
+  const isMounted = useMounted();
+
+  if (!isMounted) return null;
 
   return (
     <div className="">
@@ -50,8 +54,7 @@ export default function UserMenu() {
               onClick={() => {
                 signOut();
                 router.push("/");
-              }}
-            >
+              }}>
               Log Out
             </DropdownMenuLabel>
           </DropdownMenuContent>
