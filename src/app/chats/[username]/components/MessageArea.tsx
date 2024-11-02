@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useAtom } from "jotai";
 import { msgMutate } from "@/utils/atoms";
 import moment from "moment";
+import Markdown from "react-markdown";
 
 function SentMessage({
   message,
@@ -21,8 +22,33 @@ function SentMessage({
       <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-2">
         <div
           className=" text-left text-wrap overflow-hidden break-words"
-          style={{ whiteSpace: "pre-wrap" }}>
-          {message.message}
+          style={{ whiteSpace: "normal" }}>
+          <Markdown
+            components={{
+              h1: ({ children }) => (
+                <h1 className="text-2xl font-bold">{children}</h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="text-xl font-bold">{children}</h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="font-semibold">{children}</h3>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-gray-500 pl-4 italic p-0 m-0 ">
+                  {children}
+                </blockquote>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc pl-5">{children}</ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="list-decimal pl-5">{children}</ol>
+              ),
+              li: ({ children }) => <li className="">{children}</li>,
+            }}>
+            {message.message.trim()}
+          </Markdown>
         </div>
         <div className="w-full text-right text-xs text-gray-600">
           {moment(message.sentAt).isSame(moment(), "day")
@@ -56,8 +82,33 @@ function ReceivedMessage({
       <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-black bg-white rounded-md flex flex-col gap-2">
         <div
           className=" text-left text-wrap overflow-hidden break-words"
-          style={{ whiteSpace: "pre-wrap" }}>
-          {message.message}
+          style={{ whiteSpace: "normal" }}>
+          <Markdown
+            components={{
+              h1: ({ children }) => (
+                <h1 className="text-2xl font-bold">{children}</h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="text-xl font-bold">{children}</h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="font-semibold">{children}</h3>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-gray-500 pl-4 italic p-0 m-0 ">
+                  {children}
+                </blockquote>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc pl-5">{children}</ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="list-decimal pl-5">{children}</ol>
+              ),
+              li: ({ children }) => <li className="">{children}</li>,
+            }}>
+            {message.message.trim()}
+          </Markdown>
         </div>
         <div className="w-full text-right text-xs text-gray-600">
           {moment(message.sentAt).isSame(moment(), "day")

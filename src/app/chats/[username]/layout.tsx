@@ -15,7 +15,7 @@ export default function ChatLayout({
   children: ReactNode;
 }) {
   const { data: userData } = useSWR(["userdata", params.username], () =>
-    getUserData(params.username),
+    getUserData(params.username)
   );
 
   if (!userData) {
@@ -34,7 +34,9 @@ export default function ChatLayout({
       </div>
 
       {/* Scrollable content area */}
-      <div className="absolute inset-0 overflow-y-auto py-24">{children}</div>
+      <div className="absolute inset-0 overflow-y-auto py-24 pb-28">
+        {children}
+      </div>
 
       {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-50 bg-white">
