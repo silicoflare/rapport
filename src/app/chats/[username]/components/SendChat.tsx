@@ -18,7 +18,7 @@ export default function SendChat({ username }: { username: string }) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${Math.min(
         textareaRef.current.scrollHeight,
-        200,
+        200
       )}px`; // Add max height of 200px
     }
   }, [message]);
@@ -50,7 +50,7 @@ export default function SendChat({ username }: { username: string }) {
       />
       <button
         disabled={message.trim().length === 0}
-        className="p-2 w-10 h-10 flex-shrink-0 disabled:text-gray-500"
+        className="p-2 w-10 h-10 flex-shrink-0"
         onClick={() => messageSend()}>
         <SendHorizonalIcon size={20} className="cursor-pointer" />
       </button>

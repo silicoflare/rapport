@@ -7,6 +7,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { useAtom } from "jotai";
 import { msgMutate } from "@/utils/atoms";
+import moment from "moment";
 
 function SentMessage({
   message,
@@ -17,10 +18,17 @@ function SentMessage({
 }) {
   return (
     <div className="w-full flex items-start justify-end gap-2 px-10">
-      <div
-        className="max-w-[60%] p-2 px-3 bg-gray-300 border-gray-300 rounded-md text-left text-wrap overflow-hidden break-words"
-        style={{ whiteSpace: "pre-wrap" }}>
-        {message.message}
+      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-2">
+        <div
+          className=" text-left text-wrap overflow-hidden break-words"
+          style={{ whiteSpace: "pre-wrap" }}>
+          {message.message}
+        </div>
+        <div className="w-full text-right text-xs text-gray-600">
+          {moment(message.sentAt).isSame(moment(), "day")
+            ? moment(message.sentAt).format("h:mm a")
+            : moment(message.sentAt).calendar()}
+        </div>
       </div>
       <Avatar>
         <AvatarImage
@@ -45,10 +53,17 @@ function ReceivedMessage({
           src={`https://api.dicebear.com/9.x/notionists/svg?backgroundColor=EEEEEE&seed=${name}`}
         />
       </Avatar>
-      <div
-        className="max-w-[60%] p-2 px-3 border border-black bg-white rounded-md text-left text-wrap overflow-hidden break-words"
-        style={{ whiteSpace: "pre-wrap" }}>
-        {message.message}
+      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-black bg-white rounded-md flex flex-col gap-2">
+        <div
+          className=" text-left text-wrap overflow-hidden break-words"
+          style={{ whiteSpace: "pre-wrap" }}>
+          {message.message}
+        </div>
+        <div className="w-full text-right text-xs text-gray-600">
+          {moment(message.sentAt).isSame(moment(), "day")
+            ? moment(message.sentAt).format("h:mm a")
+            : moment(message.sentAt).calendar()}
+        </div>
       </div>
     </div>
   );
@@ -62,7 +77,7 @@ export default function MessageArea({
   name: string;
 }) {
   const { data: messages, mutate } = useSWR(["messages", username], () =>
-    getMessages(username),
+    getMessages(username)
   );
   const { data: session } = useSession();
   const [, setMutate] = useAtom(msgMutate);
@@ -90,7 +105,7 @@ export default function MessageArea({
           <SentMessage message={msg} name={session!.user.name} key={msg.id} />
         ) : (
           <ReceivedMessage message={msg} name={name} key={msg.id} />
-        ),
+        )
       )}
 
       {/* Dummy div to act as the scroll target */}
