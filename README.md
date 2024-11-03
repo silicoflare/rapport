@@ -32,7 +32,7 @@ It is hard to explain how it works, in a simple manner, so here's all the layers
 ### Authentication
 
 $$
-password \xrightarrow[\times97965,\ AUTH\_SALT]{pbkdf2-sha256} PAK\ {(password\ auth\ key)}
+password \xrightarrow[\times97965,\ AUTH\\_SALT]{pbkdf2-sha256} PAK\ {(password\ auth\ key)}
 $$
 
 $$
@@ -46,27 +46,27 @@ $$
 ### User secrets
 
 $$
-keystore\ \xrightarrow[PAK]{AES\ decrypt}\  user\_secret
+keystore\ \xrightarrow[PAK]{AES\ decrypt}\  user\\_secret
 $$
 
 $$
-privatestore\ \xrightarrow[user\_secret]{AES\ decrypt}\ private\_key
+privatestore\ \xrightarrow[user\\_secret]{AES\ decrypt}\ private\\_key
 $$
 
 ### Chat secrets
 
 $$
-chatstore\ \xrightarrow[private\_key]{ECIES\ decrypt}\ chat\_secret
+chatstore\ \xrightarrow[private\\_key]{ECIES\ decrypt}\ chat\\_secret
 $$
 
 $$
-recipient\_public\_key\ \xrightarrow[private\_key]{ECDH\ compute}\ shared\_secret
+recipient\\_public\\_key\ \xrightarrow[private\\_key]{ECDH\ compute}\ shared\\_secret
 $$
 
 ### Message decryption
 
 $$
-shared\_secret\ \xrightarrow{sha256}\ K_{-2}
+shared\\_secret\ \xrightarrow{sha256}\ K_{-2}
 $$
 
 $$
@@ -74,7 +74,7 @@ msgstore\ \xrightarrow[K_{-2}]{AES\ decrypt}\ res_{-1}
 $$
 
 $$
-msg_id\ +\ chat\_secret\ \xrightarrow[\times230903,\ MSG\_SALT]{pbkdf2-sha256}\ K_{-1}
+msg\\_id\ +\ chat\\_secret\ \xrightarrow[\times230903,\ MSG\\_SALT]{pbkdf2-sha256}\ K_{-1}
 $$
 
 $$
