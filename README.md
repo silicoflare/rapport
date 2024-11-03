@@ -66,7 +66,7 @@ $$
 ### Message decryption
 
 $$
-shared\\_secret\ \xrightarrow{sha256}\ K_{-2}
+shared\\_secret\ \xrightarrow[]{sha256}\ K_{-2}
 $$
 
 $$
