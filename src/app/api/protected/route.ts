@@ -8,7 +8,6 @@ import { getToken } from "next-auth/jwt";
 export async function GET(req: NextRequest) {
   const session = await auth();
   const token = await getToken({ req });
-  console.log(req.cookies);
 
   if (!session) {
     return Response.json(

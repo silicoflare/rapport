@@ -112,7 +112,6 @@ export const authOptions: AuthOptions = {
               user.userSecret!.privatestore
             ),
           };
-          console.log(data);
           return data;
         }
         return null;
