@@ -80,8 +80,8 @@ export async function sendMessage(username: string, message: string) {
   // layer 1
   const layer1 = new AES(
     pbkdf2Sync(msgid + chat_secret, salt, 230903, 32, "sha256").toString(
-      "base64",
-    ),
+      "base64"
+    )
   );
   const layer1Res = layer1.encrypt(message);
 
@@ -143,15 +143,15 @@ export async function getMessages(username: string) {
   for (const msg of messageList) {
     // layer 2
     const layer2 = new AES(
-      createHash("sha256").update(shared).digest("base64"),
+      createHash("sha256").update(shared).digest("base64")
     );
     const layer2Res = layer2.decrypt(msg.msgstore);
 
     // layer 1
     const layer1 = new AES(
       pbkdf2Sync(msg.id + chat_secret, msg.salt, 230903, 32, "sha256").toString(
-        "base64",
-      ),
+        "base64"
+      )
     );
     const layer1Res = layer1.decrypt(layer2Res);
 
@@ -164,4 +164,12 @@ export async function getMessages(username: string) {
   }
 
   return messages;
+}
+
+export async function deleteMessage(id: string) {
+  await db.message.delete({
+    where: {
+      id,
+    },
+  });
 }

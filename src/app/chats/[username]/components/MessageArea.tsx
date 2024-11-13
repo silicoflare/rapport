@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { ActionMessage, getMessages, getUserData } from "../actions";
+import { ActionMessage, getMessages } from "../actions";
 import { useEffect, useRef } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { msgMutate } from "@/utils/atoms";
 import moment from "moment";
 import Markdown from "react-markdown";
+import DeleteMessage from "./DeleteMessage";
 
 function SentMessage({
   message,
@@ -19,7 +20,7 @@ function SentMessage({
 }) {
   return (
     <div className="w-full flex items-start justify-end gap-2 px-10">
-      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-2">
+      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-2 group">
         <div
           className=" text-left text-wrap overflow-hidden break-words"
           style={{ whiteSpace: "normal" }}>
@@ -50,10 +51,13 @@ function SentMessage({
             {message.message.trim()}
           </Markdown>
         </div>
-        <div className="w-full text-right text-xs text-gray-600">
-          {moment(message.sentAt).isSame(moment(), "day")
-            ? moment(message.sentAt).format("h:mm a")
-            : moment(message.sentAt).calendar()}
+        <div className="w-full flex items-center justify-between text-xs text-gray-600">
+          <DeleteMessage id={message.id} />
+          <span>
+            {moment(message.sentAt).isSame(moment(), "day")
+              ? moment(message.sentAt).format("h:mm a")
+              : moment(message.sentAt).calendar()}
+          </span>
         </div>
       </div>
       <Avatar>
