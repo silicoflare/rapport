@@ -126,6 +126,7 @@ function ReceivedMessage({
           </Markdown>
         </div>
         <div className="w-full text-right text-xs text-gray-600">
+          {message.edited ? "Edited " : ""}
           {moment(message.sentAt).isSame(moment(), "day")
             ? moment(message.sentAt).format("h:mm a")
             : moment(message.sentAt).calendar()}
