@@ -10,13 +10,16 @@ import { msgMutate } from "@/utils/atoms";
 import moment from "moment";
 import Markdown from "react-markdown";
 import DeleteMessage from "./DeleteMessage";
+import EditMessage from "./EditMessage";
 
 function SentMessage({
   message,
   name,
+  to,
 }: {
   message: ActionMessage;
   name: string;
+  to: string;
 }) {
   return (
     <div className="w-full flex items-start justify-end gap-2 px-10">
@@ -52,8 +55,16 @@ function SentMessage({
           </Markdown>
         </div>
         <div className="w-full flex items-center justify-between text-xs text-gray-600">
-          <DeleteMessage id={message.id} />
-          <span>
+          <div className="flex items-center justify-center gap-2">
+            <EditMessage
+              id={message.id}
+              content={message.message.trim()}
+              username={to}
+            />
+            <DeleteMessage id={message.id} />
+          </div>
+          <span className="flex items-center gap-2">
+            {message.edited ? "Edited " : ""}
             {moment(message.sentAt).isSame(moment(), "day")
               ? moment(message.sentAt).format("h:mm a")
               : moment(message.sentAt).calendar()}
@@ -157,7 +168,12 @@ export default function MessageArea({
     <div className="flex flex-col h-fit gap-2 overflow-y-auto z-0">
       {messages?.map((msg) =>
         msg.sender ? (
-          <SentMessage message={msg} name={session!.user.name} key={msg.id} />
+          <SentMessage
+            message={msg}
+            name={session!.user.name}
+            to={username}
+            key={msg.id}
+          />
         ) : (
           <ReceivedMessage message={msg} name={name} key={msg.id} />
         )

@@ -106,6 +106,7 @@ export interface ActionMessage {
   message: string;
   sender: boolean;
   sentAt: Date;
+  edited: boolean;
 }
 
 export async function getMessages(username: string) {
@@ -160,6 +161,7 @@ export async function getMessages(username: string) {
       message: layer1Res,
       sender: msg.senderID === ID,
       sentAt: msg.sentAt,
+      edited: msg.edited,
     });
   }
 
@@ -170,6 +172,56 @@ export async function deleteMessage(id: string) {
   await db.message.delete({
     where: {
       id,
+    },
+  });
+}
+
+export async function editMessage(
+  username: string,
+  msgid: string,
+  message: string
+) {
+  const ID = (await auth())!.user.id;
+
+  const { id, secret } = await getChat(username);
+  const user = await db.user.findFirst({
+    where: {
+      username,
+    },
+    include: {
+      userSecret: true,
+    },
+  });
+
+  // get all required stuff for encryption
+  const salt = randomBytes(32).toString("base64");
+  const ecdh = (await userSecrets())!.ecdh;
+  const chat_secret = await ecdh.decrypt(secret);
+  const shared = await ecdh
+    .compute(Buffer.from(user!.userSecret!.publickey, "base64"))
+    .toString("base64");
+
+  // layer 1
+  const layer1 = new AES(
+    pbkdf2Sync(msgid + chat_secret, salt, 230903, 32, "sha256").toString(
+      "base64"
+    )
+  );
+  const layer1Res = layer1.encrypt(message);
+
+  // layer 2
+  const layer2 = new AES(createHash("sha256").update(shared).digest("base64"));
+  const layer2Res = layer2.encrypt(layer1Res);
+
+  // create record
+  await db.message.update({
+    where: {
+      id: msgid,
+    },
+    data: {
+      salt,
+      msgstore: layer2Res,
+      edited: true,
     },
   });
 }
