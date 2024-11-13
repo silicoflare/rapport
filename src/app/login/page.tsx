@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function SignUp() {
   const router = useRouter();
@@ -86,6 +87,11 @@ export default function SignUp() {
           </div>
         </form>
       </Form>
+      <div className="w-full text-center mt-10">
+        <Link href="/recover" className="underline">
+          Forgot password?
+        </Link>
+      </div>
     </div>
   );
 }
