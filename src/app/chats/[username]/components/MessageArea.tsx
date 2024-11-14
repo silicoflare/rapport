@@ -144,7 +144,9 @@ export default function MessageArea({
   name: string;
 }) {
   const { data: messages, mutate } = useSWR(["messages", username], () =>
-    getMessages(username)
+    getMessages(username), {
+      refreshInterval:500
+    }
   );
   const { data: session } = useSession();
   const [, setMutate] = useAtom(msgMutate);
