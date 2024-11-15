@@ -46,9 +46,9 @@ export default function UserMenu() {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="border border-primary shadow-none font-body">
-            <DropdownMenuLabel>Chats</DropdownMenuLabel>
+            {/* <DropdownMenuLabel>Chats</DropdownMenuLabel>
             <DropdownMenuLabel>Profile</DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-primary" />
+            <DropdownMenuSeparator className="bg-primary" /> */}
             <DropdownMenuLabel
               className="text-red-600 cursor-pointer"
               onClick={() => {

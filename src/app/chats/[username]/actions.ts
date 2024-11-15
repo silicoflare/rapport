@@ -95,6 +95,7 @@ export async function sendMessage(username: string, message: string) {
       id: msgid,
       chatID: id,
       senderID: ID,
+      deleteBits: "00",
       salt,
       msgstore: layer2Res,
     },
@@ -142,6 +143,23 @@ export async function getMessages(username: string) {
 
   // Decrypt the messages
   for (const msg of messageList) {
+    const isSender = msg.senderID === ID;
+    // if message deleted, don't decrypt
+    if (
+      (isSender && msg.deleteBits[1] === "1") ||
+      (!isSender && msg.deleteBits[0] === "1") ||
+      msg.deleteBits === "11"
+    ) {
+      messages.push({
+        id: msg.id,
+        message: "!--deleted--!",
+        sender: isSender,
+        sentAt: msg.sentAt,
+        edited: msg.edited,
+      });
+      continue;
+    }
+
     // layer 2
     const layer2 = new AES(
       createHash("sha256").update(shared).digest("base64")
@@ -159,7 +177,7 @@ export async function getMessages(username: string) {
     messages.push({
       id: msg.id,
       message: layer1Res,
-      sender: msg.senderID === ID,
+      sender: isSender,
       sentAt: msg.sentAt,
       edited: msg.edited,
     });
@@ -168,10 +186,21 @@ export async function getMessages(username: string) {
   return messages;
 }
 
-export async function deleteMessage(id: string) {
-  await db.message.delete({
+export async function deleteMessage(id: string, deleteBits: string) {
+  const msg = await db.message.findFirst({
     where: {
       id,
+    },
+  });
+
+  await db.message.update({
+    where: {
+      id,
+    },
+    data: {
+      deleteBits: (
+        parseInt(msg!.deleteBits, 2) + parseInt(deleteBits, 2)
+      ).toString(2),
     },
   });
 }

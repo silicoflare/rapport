@@ -45,16 +45,17 @@ model ChatSecret {
 }
 
 model Message {
-  id       String    @id
-  chat     Chat      @relation(fields: [chatID], references: [id])
-  chatID   String
-  sender   User      @relation(fields: [senderID], references: [id])
-  senderID String
-  reply    Message?  @relation("reply", fields: [replyID], references: [id])
-  replyID  String?
-  edited   Boolean   @default(false)
-  salt     String
-  sentAt   DateTime  @default(now())
-  msgstore String    @db.LongText
-  refers   Message[] @relation("reply")
+  id         String    @id
+  chat       Chat      @relation(fields: [chatID], references: [id])
+  chatID     String
+  sender     User      @relation(fields: [senderID], references: [id])
+  senderID   String
+  reply      Message?  @relation("reply", fields: [replyID], references: [id])
+  replyID    String?
+  edited     Boolean   @default(false)
+  deleteBits String
+  salt       String
+  sentAt     DateTime  @default(now())
+  msgstore   String    @db.LongText
+  refers     Message[] @relation("reply")
 }
