@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/utils/db";
-import { auth } from "../api/auth/[...nextauth]/route";
+import { auth } from "../api/auth/[...nextauth]/auth";
 import { randomBytes } from "crypto";
 import { userSecrets } from "@/utils/keys";
 
@@ -169,8 +169,14 @@ export async function addContact(id: string) {
     })
   ).id;
 
+  const secrets = await userSecrets();
+
+  if (!secrets) {
+    return;
+  }
+
   // get current user's ECDH object
-  const { ecdh } = await userSecrets();
+  const { ecdh } = secrets;
 
   // encrypt chat secrets for both users
   await db.chatSecret.create({

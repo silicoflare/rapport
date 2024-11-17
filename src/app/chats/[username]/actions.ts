@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import AES from "@/utils/crypto/AES";
 import db from "@/utils/db";
 import { userSecrets } from "@/utils/keys";

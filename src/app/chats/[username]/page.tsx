@@ -3,15 +3,22 @@
 import useSWR from "swr";
 import { getUserData } from "./actions";
 import MessageArea from "./components/MessageArea";
+import { use } from "react";
 
-export default function UserChat({ params }: { params: { username: string } }) {
-  const { data: userData } = useSWR(["userdata", params.username], () =>
-    getUserData(params.username)
+interface PageProps {
+  params: Promise<{ username: string }>;
+}
+
+export default function UserChat({ params }: PageProps) {
+  const { username } = use(params);
+
+  const { data: userData } = useSWR(["userdata", username], () =>
+    getUserData(username)
   );
 
   return (
     <div className="w-full">
-      <MessageArea username={params.username} name={userData!.name} />
+      <MessageArea username={username} name={userData!.name} />
     </div>
   );
 }

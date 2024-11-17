@@ -4,11 +4,13 @@ import ECDH from "./crypto/ECDH";
 import env from "@/env";
 import db from "./db";
 import { cookies } from "next/headers";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 
 export async function userSecrets() {
   const cookieStore = cookies();
-  const sessionCookie = cookieStore.get("next-auth.session-token")?.value;
+  const sessionCookie = (await cookieStore).get(
+    "next-auth.session-token"
+  )?.value;
 
   if (!sessionCookie) {
     return;

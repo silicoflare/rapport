@@ -3,19 +3,20 @@
 import useSWR from "swr";
 import ChatBar from "./components/ChatBar";
 import { getUserData } from "./actions";
-import { ReactNode } from "react";
+import { ReactNode, use } from "react";
 import SendChat from "./components/SendChat";
 import { LoaderCircleIcon } from "lucide-react";
 
-export default function ChatLayout({
-  params,
-  children,
-}: {
-  params: { username: string };
+interface LayoutProps {
+  params: Promise<{ username: string }>;
   children: ReactNode;
-}) {
-  const { data: userData } = useSWR(["userdata", params.username], () =>
-    getUserData(params.username)
+}
+
+export default function ChatLayout({ params, children }: LayoutProps) {
+  const { username } = use(params);
+
+  const { data: userData } = useSWR(["userdata", username], () =>
+    getUserData(username)
   );
 
   if (!userData) {
@@ -40,7 +41,7 @@ export default function ChatLayout({
 
       {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-50 bg-white">
-        <SendChat username={params.username} />
+        <SendChat username={username} />
       </div>
     </div>
   );

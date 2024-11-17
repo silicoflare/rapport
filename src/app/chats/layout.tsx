@@ -14,7 +14,7 @@ export default function ChatsLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        if (pathname.startsWith("/chats/")) {
+        if (pathname && pathname.startsWith("/chats/")) {
           router.push("/chats");
         }
       }
