@@ -63,7 +63,7 @@ export default function AddContact({
       <DialogTrigger className="w-10 h-full bg-primary border-primary rounded-md text-white text-sm p-2 flex items-center justify-center">
         <PlusIcon size={15} />
       </DialogTrigger>
-      <DialogContent className="max-h-[66.666667%]">
+      <DialogContent className="max-h-[66.67%] ph:max-w-[90%]">
         <DialogHeader>
           <DialogTitle>Add Contact</DialogTitle>
         </DialogHeader>

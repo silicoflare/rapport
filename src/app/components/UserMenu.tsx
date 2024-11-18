@@ -23,13 +23,13 @@ export default function UserMenu() {
   return (
     <div className="">
       {!session ? (
-        <Button className="font-header" onClick={() => router.push("/login")}>
+        <Button className="font-body" onClick={() => router.push("/login")}>
           Login
         </Button>
       ) : (
         <DropdownMenu>
           <DropdownMenuTrigger disabled={!session?.user}>
-            <div className="flex items-center justify-center gap-3 px-5 py-3 border-white rounded-md hover:bg-gray-200 hover:border-gray-200 transition ease-in-out duration-300 text-lg cursor-pointer">
+            <div className="flex items-center justify-center gap-3 ph:px-2 outline-none px-5 py-3 border-white rounded-md hover:bg-gray-200 hover:border-gray-200 transition ease-in-out duration-300 text-lg cursor-pointer">
               <Avatar>
                 <AvatarImage
                   src={`https://api.dicebear.com/9.x/notionists/svg?backgroundColor=EEEEEE&seed=${
@@ -37,7 +37,7 @@ export default function UserMenu() {
                   }`}
                 />
               </Avatar>
-              <div className="flex flex-col items-start justify-center leading-tight">
+              <div className="flex flex-col items-start justify-center leading-tight ph:hidden">
                 {session.user!.name}
                 <span className="text-xs text-gray-700">
                   {session.user!.username}

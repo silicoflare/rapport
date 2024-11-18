@@ -5,3 +5,5 @@ import { type KeyedMutator } from "swr";
 export const recAtom = atom<string | null>(null);
 
 export const msgMutate = atom<KeyedMutator<ActionMessage[]> | null>(null);
+
+export const searchAtom = atom<string>("");

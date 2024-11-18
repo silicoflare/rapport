@@ -52,7 +52,14 @@ export default function SendChat({ username }: { username: string }) {
         disabled={message.trim().length === 0}
         className="p-2 w-10 h-10 flex-shrink-0"
         onClick={() => messageSend()}>
-        <SendHorizonalIcon size={20} className="cursor-pointer" />
+        <SendHorizonalIcon
+          size={20}
+          className="cursor-pointer hidden md:inline"
+        />
+        <SendHorizonalIcon
+          size={25}
+          className="cursor-pointer inline md:hidden"
+        />
       </button>
     </div>
   );

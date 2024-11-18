@@ -22,7 +22,7 @@ export default function Passphrase() {
 
   return (
     <div className="flex flex-col w-screen h-screen gap-3 justify-center items-center">
-      <div className="w-1/3 flex flex-col items-center">
+      <div className="w-4/5 md:w-1/3 flex flex-col items-center">
         <h2 className={cn("text-3xl font-semibold", turretroad)}>
           Recovery phrase
         </h2>
@@ -31,12 +31,11 @@ export default function Passphrase() {
           lose it, <b>you cannot recover your account</b>.
         </span>
         <div
-          className="mt-5 p-5 font-mono bg-gray-300 border border-gray-300 rounded-md cursor-pointer grid grid-cols-4 gap-3 items-center align-middle text-center justify-items-center"
+          className="mt-5 p-5 font-mono bg-gray-300 border border-gray-300 rounded-md cursor-pointer grid grid-cols-3 md:grid-cols-4 gap-3 items-center align-middle text-center justify-items-center"
           onClick={async () => {
             await navigator.clipboard.writeText(passphrase ?? "");
             toast.success("Copied to clipboard!");
-          }}
-        >
+          }}>
           {passphrase?.split(" ").map((x, index) => (
             <span key={index}>{x}</span>
           ))}
@@ -46,8 +45,7 @@ export default function Passphrase() {
           onClick={() => {
             setPassphrase(null);
             router.replace("/");
-          }}
-        >
+          }}>
           Done
         </Button>
       </div>

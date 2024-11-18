@@ -30,9 +30,18 @@ export default function ChatsLayout({ children }: { children: ReactNode }) {
   if (!isMounted) return <></>;
 
   return (
-    <div className="w-full h-full grid grid-cols-4 border-t border-black overflow-hidden">
-      <ChatList />
-      <div className="w-full h-full col-span-3">{children}</div>
-    </div>
+    <>
+      <div className="w-full h-full hidden md:grid grid-cols-4 border-t border-black overflow-hidden">
+        <ChatList />
+        <div className="w-full h-full col-span-3">{children}</div>
+      </div>
+      <div className="w-full h-full grid md:hidden border-t border-black overflow-hidden">
+        {pathname === "/chats" ? (
+          <ChatList />
+        ) : (
+          <div className="w-full h-full col-span-3">{children}</div>
+        )}
+      </div>
+    </>
   );
 }

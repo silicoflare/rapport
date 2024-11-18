@@ -53,7 +53,7 @@ export default function SignUp() {
     <div className="flex flex-col w-full h-full items-center justify-center gap-2">
       <h2 className="text-3xl font-semibold font-header">Login</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className={cn("w-1/4")}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-4/5 md:w-1/4">
           <FormField
             control={form.control}
             name="username"

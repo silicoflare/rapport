@@ -59,8 +59,8 @@ function SentMessage({
   to: string;
 }) {
   return (
-    <div className="w-full flex items-start justify-end gap-2 px-10">
-      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-2 group">
+    <div className="w-full flex items-start justify-end gap-2 px-5 md:px-10">
+      <div className="min-w-[25%] max-w-[60%] ph:min-w-[75%] ph:text-sm ph:py-1 py-2 px-3 border border-gray-300 bg-gray-300 rounded-md flex flex-col gap-1 md:gap-2 group">
         <MessageContent message={message} />
         <div className="w-full flex items-center justify-between text-xs text-gray-600">
           {message.message !== "!--deleted--!" ? (
@@ -102,13 +102,13 @@ function ReceivedMessage({
   name: string;
 }) {
   return (
-    <div className="w-full flex items-start justify-start gap-2 px-10">
+    <div className="w-full flex items-start justify-start gap-2 px-5 md:px-10">
       <Avatar>
         <AvatarImage
           src={`https://api.dicebear.com/9.x/notionists/svg?backgroundColor=EEEEEE&seed=${name}`}
         />
       </Avatar>
-      <div className="min-w-[25%] max-w-[60%] p-2 px-3 border border-black bg-white rounded-md flex flex-col gap-2 group">
+      <div className="min-w-[25%] max-w-[60%] ph:min-w-[75%] ph:text-sm ph:py-1 py-2 px-3 border border-black bg-white rounded-md flex flex-col ph:gap-1 gap-2 group">
         <MessageContent message={message} />
         <div className="w-full flex items-center justify-between text-xs text-gray-600">
           {message.message !== "!--deleted--!" ? (

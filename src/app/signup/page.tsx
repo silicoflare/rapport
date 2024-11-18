@@ -18,7 +18,7 @@ import { signUp } from "@/utils/bridge";
 import { useAtom } from "jotai";
 import { recAtom } from "@/utils/atoms";
 import { cn } from "@/lib/utils";
-import signup from "./signup";
+import signup, { userExists } from "./signup";
 
 export default function SignUp() {
   const router = useRouter();
@@ -54,6 +54,13 @@ export default function SignUp() {
       return;
     }
 
+    if (await userExists(data.username)) {
+      form.setError("username", {
+        message: "Username already taken",
+      });
+      return;
+    }
+
     const res = await signup(data.name, data.username, data.confPassword);
     setPhrase(res.recoveryphrase);
     router.push("/recphrase");
@@ -63,7 +70,7 @@ export default function SignUp() {
     <div className="flex flex-col w-full h-full items-center justify-center gap-2">
       <h2 className="text-3xl font-semibold font-header">Sign Up</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className={cn("w-1/4")}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-4/5 md:w-1/4">
           <FormField
             control={form.control}
             name="name"

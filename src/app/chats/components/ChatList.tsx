@@ -39,8 +39,24 @@ function UserCard({
 
 export default function ChatList() {
   const [search, setSearch] = useState("");
-  const { data: chats, mutate } = useSWR<ActionContact[]>("chats", getContacts);
+  const { data, mutate } = useSWR<ActionContact[]>("chats", getContacts);
+  const [chats, setChats] = useState<ActionContact[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!data) return;
+
+    let temp = data;
+    if (search.trim() !== "") {
+      temp = temp.filter(
+        (ch) =>
+          ch.name.toLowerCase().includes(search.toLowerCase()) ||
+          ch.username.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    setChats(temp);
+  }, [data, search]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-start border-r border-black p-5">
@@ -50,12 +66,15 @@ export default function ChatList() {
       </div>
       <div className="w-full h-full overflow-y-auto flex flex-col gap-2 items-center mt-5">
         {chats?.map((chat) => (
-          <Link
-            href={`/chats/${chat.username}`}
+          <div
+            onClick={() => {
+              router.push(`/chats/${chat.username}`);
+              setSearch("");
+            }}
             className="w-full"
             key={chat.username}>
             <UserCard name={chat.name} username={chat.username} />
-          </Link>
+          </div>
         ))}
       </div>
     </div>

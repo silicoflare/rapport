@@ -76,3 +76,12 @@ export default async function signup(
 
   return { recoveryphrase };
 }
+
+export async function userExists(username: string) {
+  const user = await db.user.findFirst({
+    where: {
+      username,
+    },
+  });
+  return user !== null;
+}

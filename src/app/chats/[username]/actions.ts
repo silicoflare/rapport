@@ -198,9 +198,9 @@ export async function deleteMessage(id: string, deleteBits: string) {
       id,
     },
     data: {
-      deleteBits: (
-        parseInt(msg!.deleteBits, 2) + parseInt(deleteBits, 2)
-      ).toString(2),
+      deleteBits: (parseInt(msg!.deleteBits, 2) + parseInt(deleteBits, 2))
+        .toString(2)
+        .padStart(2, "0"),
     },
   });
 }

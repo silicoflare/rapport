@@ -38,7 +38,7 @@ export default function DeleteMessage({
           className="hidden group-hover:inline cursor-pointer"
         />
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="ph:max-w-[95%]">
         <AlertDialogHeader>
           <AlertDialogTitle>
             Are you sure you want to delete the message?
@@ -48,7 +48,7 @@ export default function DeleteMessage({
             {isSender ? " or for everyone" : ""}.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="gap-2">
           <AlertDialogAction onClick={() => delMessage(1)}>
             Delete for me
           </AlertDialogAction>
