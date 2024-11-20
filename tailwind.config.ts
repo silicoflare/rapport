@@ -57,7 +57,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        header: '"Turret Road"',
+        header: '"Orbitron"',
         body: '"Raleway"',
       },
       screens: {
