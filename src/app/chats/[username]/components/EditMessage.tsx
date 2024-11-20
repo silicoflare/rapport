@@ -43,7 +43,7 @@ const EditMessage = ({
           className="hidden group-hover:inline cursor-pointer"
         />
       </DialogTrigger>
-      <DialogContent className="max-w-[95%]">
+      <DialogContent className="ph:max-w-[95%]">
         <DialogTitle>Edit Message</DialogTitle>
         <div className="w-full flex flex-col items-center gap-2">
           <Textarea
